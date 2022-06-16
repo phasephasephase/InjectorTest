@@ -13,10 +13,23 @@ namespace InjectorTest
 
         private async Task MainAsync(string[] args)
         {
-            if (args.Length == 0 || args.Length > 1 || !args[0].EndsWith(".dll"))
+            string arg; 
+            start:
+            // if you didn't provide a correct arg then this will always be true
+            if (args.Length == 0 || args.Length > 1)
             {
-                Console.WriteLine("Provide a path to a DLL file (use \"quotes\" if you have to)");
-                Environment.Exit(-1);
+                Console.WriteLine("Provide a path to a DLL file or a link to a DLL:");
+                arg = Console.ReadLine();
+            }
+            else
+            {
+                arg = args[0];
+            }
+
+            if (arg != null && !arg.EndsWith(".dll"))
+            {
+                Console.WriteLine("That's not a DLL file!");
+                goto start;
             }
 
             var minecraftIndex = Process.GetProcessesByName("Minecraft.Windows");
@@ -25,17 +38,18 @@ namespace InjectorTest
             {
                 Console.WriteLine("Minecraft is already open, skipping module check");
                 Minecraft = minecraftIndex[0];
-                await Injector.Inject(args[0]);
+                await Injector.Inject(arg);
             }
             else
             {
                 Process.Start("minecraft://");
                 Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
                 await WaitForModules();
-                await Injector.Inject(args[0]);
+                await Injector.Inject(arg);
             }
 
-            Console.WriteLine("done");
+            Console.WriteLine("\nPress any key to exit...");
+            Console.ReadKey();
         }
 
         private async Task WaitForModules()

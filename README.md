@@ -1,5 +1,5 @@
 # InjectorTest
-asynchronous minecraft injector that waits for minecraft's modules to load before injecting
+minecraft injector that waits for modules to load before injecting
 
 demo:
 

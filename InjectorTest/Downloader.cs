@@ -18,6 +18,8 @@ namespace InjectorTest
                     await s.CopyToAsync(fs);
                 }
             }
+            
+            Console.WriteLine("Download finished");
         }
     }
 }

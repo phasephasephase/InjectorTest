@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +19,7 @@ namespace InjectorTest
             // if you didn't provide a correct arg then this will always be true
             if (args.Length == 0 || args.Length > 1)
             {
-                Console.WriteLine("Provide a path to a DLL file or a link to a DLL:");
+                Console.WriteLine("Provide a path or link to a DLL:");
                 arg = Console.ReadLine();
             }
             else
@@ -31,6 +32,16 @@ namespace InjectorTest
                 Console.WriteLine("That's not a DLL file!");
                 goto start;
             }
+            
+            // check for url
+            if (arg != null && arg.StartsWith("http"))
+			{
+				Console.WriteLine("Starting DLL download while Minecraft loads");
+				Task.Run(() => Downloader.DownloadFile(arg, "downloaded.dll"));
+				
+				// set arg to path of downloaded file
+				arg = Path.Combine(Environment.CurrentDirectory, "downloaded.dll");
+			}
 
             var minecraftIndex = Process.GetProcessesByName("Minecraft.Windows");
 
@@ -42,6 +53,7 @@ namespace InjectorTest
             }
             else
             {
+	            Console.WriteLine("Opening Minecraft...");
                 Process.Start("minecraft://");
                 Minecraft = Process.GetProcessesByName("Minecraft.Windows")[0];
                 await WaitForModules();

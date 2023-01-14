@@ -30,11 +30,11 @@ namespace InjectorTest
             // check for url
             if (arg != null && arg.StartsWith("http"))
             {
-		Console.WriteLine("Starting DLL download while Minecraft loads");
-		Task.Run(() => Downloader.DownloadFile(arg, "downloaded.dll"));
+		        Console.WriteLine("Starting DLL download while Minecraft loads");
+		        Task.Run(() => Downloader.DownloadFile(arg, "downloaded.dll"));
 				
-		// set arg to path of downloaded file
-		arg = Path.Combine(Environment.CurrentDirectory, "downloaded.dll");
+		        // set arg to path of downloaded file
+		        arg = Path.Combine(Environment.CurrentDirectory, "downloaded.dll");
             }
 
             if (arg != null && !arg.EndsWith(".dll"))
